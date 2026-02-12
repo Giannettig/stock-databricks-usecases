@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revolt BI × Stock — Beverage Alcohol Use Cases on Databricks</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --revolt-black: #000000;
+    --revolt-yellow: #EBA52D;
+    --revolt-turquoise: #50D2D2;
+    --revolt-dark-gray: #5A646E;
+    --revolt-medium-gray: #D2E1DC;
+    --revolt-light-gray: #EBF5F0;
+
+    --bg: #0A0A0A;
+    --bg-elevated: #141414;
+    --bg-surface: #1A1A1A;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B0B8C0;
+    --text-muted: #6A7480;
+    --border: #2A2A2A;
+    --border-light: #222222;
+
+    --gen-ai: #EBA52D;
+    --gen-ai-bg: rgba(235,165,45,0.10);
+    --gen-ai-border: rgba(235,165,45,0.30);
+    --data-analytics: #50D2D2;
+    --data-analytics-bg: rgba(80,210,210,0.10);
+    --data-analytics-border: rgba(80,210,210,0.30);
+    --data-science: #B0B8C0;
+    --data-science-bg: rgba(176,184,192,0.08);
+    --data-science-border: rgba(176,184,192,0.25);
+
+    --revenue: #EBA52D;
+    --efficiency: #50D2D2;
+    --cost: #B0B8C0;
+
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3);
+    --shadow-tooltip: 0 12px 40px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    padding: 40px 64px 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 0.1s forwards;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+
+  .header h1 span { color: var(--revolt-yellow); }
+
+  .header .subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-top: 4px;
+    max-width: 700px;
+  }
+
+  .header .tagline {
+    font-size: 12px;
+    color: var(--revolt-yellow);
+    font-weight: 600;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+    opacity: 0.7;
+  }
+
+  .logos {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .logos img {
+    height: 32px;
+    width: auto;
+  }
+
+  .logo-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+  }
+
+  .logos .partner-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 64px;
+    max-width: 1600px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 0.25s forwards;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .filter-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-muted);
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .filter-btn:hover { background: rgba(255,255,255,0.04); }
+
+  .filter-btn.active {
+    border-color: currentColor;
+  }
+
+  .filter-btn.active.gen-ai { color: var(--gen-ai); border-color: var(--gen-ai-border); background: var(--gen-ai-bg); }
+  .filter-btn.active.data-analytics { color: var(--data-analytics); border-color: var(--data-analytics-border); background: var(--data-analytics-bg); }
+  .filter-btn.active.data-science { color: var(--data-science); border-color: var(--data-science-border); background: var(--data-science-bg); }
+  .filter-btn.active.high { color: var(--revolt-yellow); border-color: var(--gen-ai-border); background: var(--gen-ai-bg); }
+  .filter-btn.active.medium { color: var(--text-secondary); border-color: rgba(176,184,192,0.3); background: rgba(176,184,192,0.08); }
+  .filter-btn.active.low { color: var(--text-muted); border-color: rgba(106,116,128,0.3); background: rgba(106,116,128,0.08); }
+
+  .filter-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .filter-separator {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    margin: 0 6px;
+  }
+
+  .filter-count {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 8px;
+    font-weight: 500;
+  }
+
+  /* ─── MATRIX ─── */
+  .matrix-container {
+    padding: 12px 64px 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: 180px 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 0;
+    background: var(--bg-elevated);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .col-header {
+    padding: 18px 16px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-primary);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .col-header:first-child {
+    background: var(--bg-elevated);
+    border-bottom-color: var(--border);
+  }
+
+  .col-header:nth-child(2) { animation-delay: 0.3s; }
+  .col-header:nth-child(3) { animation-delay: 0.4s; }
+  .col-header:nth-child(4) { animation-delay: 0.5s; }
+  .col-header:nth-child(5) { animation-delay: 0.6s; }
+
+  .col-header .col-icon {
+    display: block;
+    margin: 0 auto 6px;
+    opacity: 0.5;
+  }
+
+  .col-header .col-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--text-secondary);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .row-header {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 28px;
+    border-right: 1px solid var(--border-light);
+    position: relative;
+    background: var(--bg-elevated);
+    opacity: 0;
+    animation: slideInLeft 0.5s ease-out forwards;
+  }
+
+  .row-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .row-header.revenue::before { background: var(--revenue); }
+  .row-header.efficiency::before { background: var(--efficiency); }
+  .row-header.cost::before { background: var(--cost); }
+
+  .row-header:nth-child(6) { animation-delay: 0.5s; }
+  .row-header:nth-child(11) { animation-delay: 0.7s; }
+  .row-header:nth-child(16) { animation-delay: 0.9s; }
+
+  .row-header .row-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .row-header.revenue .row-title { color: var(--revolt-yellow); }
+  .row-header.efficiency .row-title { color: var(--revolt-turquoise); }
+  .row-header.cost .row-title { color: var(--text-secondary); }
+
+  .row-header .row-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .cell {
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-right: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    min-height: 80px;
+    background: var(--bg-elevated);
+    opacity: 0;
+    animation: fadeIn 0.4s ease-out forwards;
+    transition: min-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .cell:not(:has(.use-case:not(.hidden))) {
+    min-height: 0;
+    padding: 4px 10px;
+  }
+
+  .cell:nth-child(5n) { border-right: none; }
+  .cell:nth-child(7) { animation-delay: 0.55s; }
+  .cell:nth-child(8) { animation-delay: 0.6s; }
+  .cell:nth-child(9) { animation-delay: 0.65s; }
+  .cell:nth-child(10) { animation-delay: 0.7s; }
+  .cell:nth-child(12) { animation-delay: 0.75s; }
+  .cell:nth-child(13) { animation-delay: 0.8s; }
+  .cell:nth-child(14) { animation-delay: 0.85s; }
+  .cell:nth-child(15) { animation-delay: 0.9s; }
+  .cell:nth-child(17) { animation-delay: 0.95s; }
+  .cell:nth-child(18) { animation-delay: 1.0s; }
+  .cell:nth-child(19) { animation-delay: 1.05s; }
+  .cell:nth-child(20) { animation-delay: 1.1s; }
+
+  /* ─── USE CASE CARDS ─── */
+  .use-case {
+    position: relative;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    cursor: default;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, opacity 0.25s ease;
+    border-left: 3px solid transparent;
+  }
+
+  .use-case:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); z-index: 2; }
+  .use-case.hidden {
+    display: none;
+  }
+
+  .matrix-row { display: contents; }
+  .matrix-row.hidden-row > * { display: none; }
+
+  .use-case.gen-ai { background: var(--gen-ai-bg); border-left-color: var(--gen-ai); color: var(--gen-ai); }
+  .use-case.gen-ai:hover { background: rgba(235,165,45,0.16); }
+  .use-case.data-analytics { background: var(--data-analytics-bg); border-left-color: var(--data-analytics); color: var(--data-analytics); }
+  .use-case.data-analytics:hover { background: rgba(80,210,210,0.16); }
+  .use-case.data-science { background: var(--data-science-bg); border-left-color: var(--data-science); color: var(--data-science); }
+  .use-case.data-science:hover { background: rgba(176,184,192,0.14); }
+
+  .use-case .uc-title { display: block; font-weight: 600; margin-bottom: 2px; }
+  .use-case .uc-impact { display: flex; gap: 2px; margin-top: 4px; }
+  .use-case .uc-impact .bar { width: 3px; height: 10px; border-radius: 1.5px; background: currentColor; opacity: 0.2; }
+  .use-case .uc-impact .bar.filled { opacity: 1; }
+
+  /* ─── TOOLTIP ─── */
+  .tooltip {
+    position: fixed;
+    width: 340px;
+    padding: 20px;
+    background: #1A1A1A;
+    border-radius: 10px;
+    box-shadow: var(--shadow-tooltip);
+    border: 1px solid var(--border);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 1000;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .tooltip.visible { opacity: 1; transform: translateY(0); }
+  .tooltip .tt-title { font-size: 14px; font-weight: 700; color: #FFF; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .tooltip .tt-desc { color: var(--text-secondary); margin-bottom: 12px; }
+  .tooltip .tt-databricks { padding: 10px 12px; border-radius: 6px; background: rgba(235,165,45,0.08); border: 1px solid rgba(235,165,45,0.25); font-size: 12px; color: var(--revolt-yellow); }
+  .tooltip .tt-databricks strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; color: var(--revolt-yellow); opacity: 0.7; }
+  .tooltip .tt-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
+  .tooltip .tt-tech-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tooltip .tt-tech-badge.gen-ai { background: var(--gen-ai-bg); color: var(--gen-ai); border: 1px solid var(--gen-ai-border); }
+  .tooltip .tt-tech-badge.data-analytics { background: var(--data-analytics-bg); color: var(--data-analytics); border: 1px solid var(--data-analytics-border); }
+  .tooltip .tt-tech-badge.data-science { background: var(--data-science-bg); color: var(--data-science); border: 1px solid var(--data-science-border); }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 64px 48px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 1.2s forwards;
+  }
+
+  .footer-inner { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-top: 1px solid var(--border); }
+  .footer-left { font-size: 12px; color: var(--text-muted); }
+  .footer-left img { height: 20px; vertical-align: middle; margin-right: 6px; }
+  .footer-stats { display: flex; gap: 32px; }
+  .footer-stat { text-align: center; }
+  .footer-stat .stat-num { font-size: 28px; font-weight: 800; color: var(--revolt-yellow); letter-spacing: -1px; }
+  .footer-stat .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideInLeft { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+
+  @media (max-width: 1200px) {
+    .header, .filter-bar, .matrix-container, .footer { padding-left: 32px; padding-right: 32px; }
+    .matrix { grid-template-columns: 140px 1fr 1fr 1fr 1fr; }
+    .tooltip { width: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>Beverage Alcohol Use Cases <span>on Databricks</span></h1>
+      <p class="subtitle">MECE framework of AI-driven use cases mapped by business impact and functional area — tailored for Stock's beverage alcohol operations.</p>
+      <p class="tagline">Power confident business decisions through unified data, analytics and AI.</p>
+    </div>
+    <div class="logos">
+      <img src="revolt-logo-yellow.png" alt="Revolt BI">
+      <div class="logo-divider"></div>
+      <span class="partner-name">Databricks</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FILTER BAR ─── -->
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-label">Technology</span>
+    <button class="filter-btn active gen-ai" data-filter="tech" data-value="gen-ai">
+      <div class="filter-dot" style="background:var(--gen-ai)"></div>Generative AI
+    </button>
+    <button class="filter-btn active data-analytics" data-filter="tech" data-value="data-analytics">
+      <div class="filter-dot" style="background:var(--data-analytics)"></div>Data Analytics
+    </button>
+    <button class="filter-btn active data-science" data-filter="tech" data-value="data-science">
+      <div class="filter-dot" style="background:var(--data-science)"></div>Data Science / ML
+    </button>
+  </div>
+
+  <div class="filter-separator"></div>
+
+  <div class="filter-group">
+    <span class="filter-label">Impact</span>
+    <button class="filter-btn active high" data-filter="impact" data-value="High">High</button>
+    <button class="filter-btn active medium" data-filter="impact" data-value="Medium">Medium</button>
+    <button class="filter-btn active low" data-filter="impact" data-value="Low">Low</button>
+  </div>
+
+  <span class="filter-count" id="filterCount">24 of 24 use cases</span>
+</div>
+
+<!-- ─── MATRIX ─── -->
+<div class="matrix-container">
+  <div class="matrix">
+
+    <!-- Column Headers -->
+    <div class="col-header"></div>
+    <div class="col-header">
+      <span class="col-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-6"/></svg></span>
+      Sales &amp; Distribution
+    </div>
+    <div class="col-header">
+      <span class="col-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span>
+      Marketing &amp; Brand
+    </div>
+    <div class="col-header">
+      <span class="col-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
+      Operations &amp; Supply Chain
+    </div>
+    <div class="col-header">
+      <span class="col-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      Compliance &amp; Legal
+    </div>
+
+    <!-- ═══ ROW 1: REVENUE GROWTH ═══ -->
+    <div class="matrix-row" data-row="revenue">
+    <div class="row-header revenue">
+      <div class="row-title">Revenue Growth</div>
+      <div class="row-sub">Drive top-line through AI-powered sales, personalization &amp; new channels</div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="Agentic Commerce — Autonomous B2B Ordering" data-desc="Deploy AI agents that act on behalf of buyers to anticipate needs, check inventory levels, and automate re-ordering for bars, restaurants, and retailers." data-db="Mosaic AI agents query historical order data and real-time inventory via Lakehouse to generate autonomous purchase orders." data-tech="Generative AI" data-impact="High">
+        <span class="uc-title">Agentic Commerce</span>Autonomous B2B re-ordering
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-science" data-title="Distributor &amp; Retailer Scoring" data-desc="AI scoring system that prioritizes high-value distribution partners and retail accounts based on volume, velocity, credit risk, and growth potential." data-db="Train ML models on Delta Lake to output dynamic 'propensity to buy' scores. Refresh daily via Databricks Workflows." data-tech="Data Science / ML" data-impact="High">
+        <span class="uc-title">Distributor Scoring</span>Propensity-to-buy models
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-science" data-title="90-Day Upsell &amp; Cross-Sell Framework" data-desc="Predictive models identifying the optimal time to pitch new SKUs to existing accounts. If a client buys vodka but not gin, AI detects the white space and triggers a targeted campaign." data-db="Feature Store tracks customer purchase patterns. MLflow models predict next-best-product within 90-day window." data-tech="Data Science / ML" data-impact="Medium">
+        <span class="uc-title">Upsell Framework</span>90-day cross-sell engine
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="Generative Engine Optimization (GEO)" data-desc="Monitor and optimize brand presence in LLM-generated search results (Gemini, ChatGPT). When a buyer asks 'which gin to stock?', your brand must appear." data-db="Ingest LLM search results via APIs, store in Delta Lake, track share-of-voice over time with Mosaic AI." data-tech="Generative AI" data-impact="High">
+        <span class="uc-title">Gen Engine Optimization</span>Brand presence in LLM results
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Hyper-Personalized Flavor Profiling" data-desc="Recommendation engine analyzing consumer preference data to suggest specific products or cocktail recipes — similar to Diageo's 'What's Your Whisky?' approach." data-db="Collaborative filtering models on Databricks with real-time serving via Model Serving endpoints." data-tech="Data Analytics" data-impact="Medium">
+        <span class="uc-title">Flavor Profiling</span>Personalized product recommendations
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Retail Media Network Analytics" data-desc="Unify data from fragmented retail media sources (Instacart, DoorDash, UberEats) to measure ad performance and ROI across digital shelves." data-db="Medallion architecture to ingest, cleanse, and unify cross-platform ad data in a single Lakehouse." data-tech="Data Analytics" data-impact="Medium">
+        <span class="uc-title">Retail Media Analytics</span>Cross-platform ad ROI
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Sponsorship Lift Measurement" data-desc="Connect national sponsorship data with local sales data to measure actual revenue lift from events (e.g., stadium activations) in nearby retail outlets." data-db="Geospatial joins in Spark connecting event locations to POS data within configurable radius." data-tech="Data Analytics" data-impact="Low">
+        <span class="uc-title">Sponsorship Lift</span>Event-to-sales attribution
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case data-science" data-title="Dynamic Pricing Engine" data-desc="Automate complex multi-jurisdictional pricing rules to handle state-by-state alcohol regulations and tax variances, maximizing margin per region." data-db="Rule-based engines integrated with real-time ERP data streams via Structured Streaming on Databricks." data-tech="Data Science / ML" data-impact="High">
+        <span class="uc-title">Dynamic Pricing</span>Multi-jurisdictional rules engine
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="AI-Powered Label &amp; Claim Validation" data-desc="Pre-launch validation of product labels and marketing claims against regulations to accelerate time-to-market for new products." data-db="Fine-tuned LLM on regulatory corpus via Mosaic AI, checking label text against TTB rules before submission." data-tech="Generative AI" data-impact="Medium">
+        <span class="uc-title">Label Pre-Validation</span>Faster time-to-market
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    </div><!-- /matrix-row revenue -->
+
+    <!-- ═══ ROW 2: OPERATIONAL EFFICIENCY ═══ -->
+    <div class="matrix-row" data-row="efficiency">
+    <div class="row-header efficiency">
+      <div class="row-title">Operational Efficiency</div>
+      <div class="row-sub">Automate manual processes, accelerate decisions &amp; reduce time-to-action</div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="Automated Sales Outreach &amp; Follow-Up" data-desc="AI generates personalized outreach scripts, follow-up emails, and distributor briefs based on account history and current inventory gaps." data-db="Mosaic AI agents with RAG over CRM + order data to generate contextual sales communications." data-tech="Generative AI" data-impact="Medium">
+        <span class="uc-title">Sales Automation</span>AI-generated outreach &amp; briefs
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Supplier-Distributor Shared Dashboards" data-desc="Single source of truth for sales performance and inventory visible to both suppliers and distributors — eliminating reconciliation overhead." data-db="Delta Sharing to securely share live data tables between organizations without copying data." data-tech="Data Analytics" data-impact="Medium">
+        <span class="uc-title">Shared Dashboards</span>Delta Sharing for partners
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="Generative Content &amp; Packaging Design" data-desc="Automated generation of sell sheets, social media content, product descriptions, and packaging variants at scale. Tools like Vizit score designs before manufacturing." data-db="Mosaic AI with image generation models. A/B scoring pipelines to predict shelf impact before production." data-tech="Generative AI" data-impact="High">
+        <span class="uc-title">Content Generation</span>Sell sheets, social, packaging AI
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case gen-ai" data-title="Market Research Synthesis" data-desc="Instant summarization of thousands of interviews, reviews, and qualitative data into actionable insights — reducing weeks of analysis to minutes." data-db="LLM-powered summarization over unstructured data stored in Unity Catalog with full lineage tracking." data-tech="Generative AI" data-impact="Medium">
+        <span class="uc-title">Research Synthesis</span>VoC &amp; qualitative data AI
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+      <div class="use-case gen-ai" data-title="Micro-Trend Detection &amp; Activation" data-desc="Ingest social media firehose to detect rising micro-trends (e.g., 'Zero-Proof' movement, Espresso Martini viral) before mainstream saturation, then auto-activate campaigns for matching stock." data-db="Structured Streaming ingests social APIs. Mosaic AI classifies trends and triggers marketing workflows." data-tech="Generative AI" data-impact="Medium">
+        <span class="uc-title">Micro-Trend Detection</span>Social signal &rarr; campaign activation
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case data-science" data-title="Predictive Demand Forecasting" data-desc="Time-series models forecasting inventory needs to mitigate tariffs and supply chain disruptions. Combines external economic indicators with internal sales data." data-db="AutoML + time-series models (Prophet, DeepAR) on Databricks with automated retraining via Workflows." data-tech="Data Science / ML" data-impact="High">
+        <span class="uc-title">Demand Forecasting</span>Tariff &amp; disruption resilience
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-science" data-title="Visual Quality Control" data-desc="Computer vision systems on production lines automating quality checks — fill levels, label placement, cap integrity — reducing defect rates and manual inspection costs." data-db="Image classification models trained and served via Mosaic AI with edge inference integration." data-tech="Data Science / ML" data-impact="Medium">
+        <span class="uc-title">Visual QC</span>Computer vision on production line
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="Automated Regulatory Compliance Checks" data-desc="AI scans marketing assets and labels against TTB regulations and state laws to ensure compliance before launch — preventing costly recalls and fines." data-db="Fine-tuned LLM on regulatory corpus. Unity Catalog tracks which assets passed/failed compliance with full audit trail." data-tech="Generative AI" data-impact="High">
+        <span class="uc-title">Regulatory AI</span>TTB &amp; state law auto-check
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Data Privacy &amp; PII Governance" data-desc="PII mapping and de-identification pipelines ensuring compliance with privacy laws when using consumer data for marketing personalization." data-db="Unity Catalog for governance, lineage tracking, and automated PII detection with column-level masking." data-tech="Data Analytics" data-impact="Medium">
+        <span class="uc-title">PII Governance</span>Unity Catalog privacy pipelines
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    </div><!-- /matrix-row efficiency -->
+
+    <!-- ═══ ROW 3: COST REDUCTION ═══ -->
+    <div class="matrix-row" data-row="cost">
+    <div class="row-header cost">
+      <div class="row-title">Cost Reduction</div>
+      <div class="row-sub">Minimize waste, optimize spend &amp; prevent financial losses</div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case data-science" data-title="Inventory Par Value Optimization" data-desc="Calculate profit-protecting inventory 'par values' for retailers and on-premise accounts to prevent overstocking (dead stock) while ensuring availability." data-db="Optimization algorithms on Databricks computing ideal stock levels per SKU per location, refreshed weekly." data-tech="Data Science / ML" data-impact="High">
+        <span class="uc-title">Par Value Optimization</span>Dead stock prevention
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Inventory-Aware Retail Media Bidding" data-desc="Connect stock levels to ad bid systems — increase bids when overstock risk is high, pause ads when stock is low — optimizing marketing spend against inventory reality." data-db="Real-time stock feed joined with ad platform APIs via Structured Streaming, triggering bid adjustments." data-tech="Data Analytics" data-impact="Medium">
+        <span class="uc-title">Smart Ad Bidding</span>Stock-linked media spend
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case data-science" data-title="Packaging Performance Scoring" data-desc="AI scores packaging designs based on predicted consumer appeal and shelf impact before manufacturing — avoiding costly redesigns post-production." data-db="Computer vision models trained on historical packaging performance data with A/B testing framework." data-tech="Data Science / ML" data-impact="Medium">
+        <span class="uc-title">Packaging AI Score</span>Pre-production design validation
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+      <div class="use-case gen-ai" data-title="Voice of Customer Sentiment Analysis" data-desc="Analyze unstructured text from reviews, social media, and support tickets to surface product issues early — before they become costly recalls or PR crises." data-db="NLP pipelines with Mosaic AI processing text streams. Alerts triggered when negative sentiment exceeds thresholds." data-tech="Generative AI" data-impact="Low">
+        <span class="uc-title">VoC Sentiment</span>Early issue detection
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case data-science" data-title="Supply Chain Disruption Modeling" data-desc="Simulate impact of tariffs, shipping delays, and raw material shortages on production costs. Recommend alternative sourcing strategies to protect margins." data-db="Monte Carlo simulations and scenario planning on Databricks Spark clusters with external data enrichment." data-tech="Data Science / ML" data-impact="High">
+        <span class="uc-title">Disruption Modeling</span>Tariff &amp; sourcing scenarios
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
+      </div>
+      <div class="use-case data-analytics" data-title="Production Yield Optimization" data-desc="Analyze production line data to identify inefficiencies, reduce waste, and optimize batch sizes — directly reducing per-unit production costs." data-db="IoT data ingestion via Auto Loader, analyzed with Spark SQL to detect yield patterns and anomalies." data-tech="Data Analytics" data-impact="Medium">
+        <span class="uc-title">Yield Optimization</span>Reduce production waste
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="use-case gen-ai" data-title="Compliance Risk Scoring &amp; Alerting" data-desc="Continuously monitor regulatory changes across jurisdictions and score the risk impact on current products, marketing, and distribution — avoiding fines and product holds." data-db="LLM monitors regulatory feeds. Risk scores computed and surfaced via dashboards with automated alerts." data-tech="Generative AI" data-impact="Medium">
+        <span class="uc-title">Compliance Risk Score</span>Proactive regulatory alerts
+        <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
+      </div>
+    </div>
+    </div><!-- /matrix-row cost -->
+
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <img src="revolt-logo-yellow.png" alt="Revolt BI"> — Beverage Alcohol Practice on Databricks<br>
+      Confidential — Prepared for Stock Plze&#328;-Bo&#382;kov
+    </div>
+    <div class="footer-stats">
+      <div class="footer-stat">
+        <div class="stat-num" id="statCount">24</div>
+        <div class="stat-label">Use Cases</div>
+      </div>
+      <div class="footer-stat">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Departments</div>
+      </div>
+      <div class="footer-stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Tech Layers</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TOOLTIP ─── -->
+<div class="tooltip" id="tooltip">
+  <div class="tt-title"></div>
+  <div class="tt-desc"></div>
+  <div class="tt-databricks"><strong>Databricks Angle</strong></div>
+  <div class="tt-meta">
+    <span class="tt-impact-text"></span>
+    <span class="tt-tech-badge"></span>
+  </div>
+</div>
+
+<script>
+  // ─── FILTER LOGIC ───
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const useCases = document.querySelectorAll('.use-case');
+  const cells = document.querySelectorAll('.cell');
+  const matrixRows = document.querySelectorAll('.matrix-row');
+  const filterCountEl = document.getElementById('filterCount');
+  const statCountEl = document.getElementById('statCount');
+  const total = useCases.length;
+
+  function getActiveFilters(type) {
+    return [...document.querySelectorAll(`.filter-btn[data-filter="${type}"].active`)]
+      .map(b => b.dataset.value);
+  }
+
+  function applyFilters() {
+    const activeTechs = getActiveFilters('tech');
+    const activeImpacts = getActiveFilters('impact');
+    let visible = 0;
+
+    // 1. Show/hide individual use-case cards
+    useCases.forEach(uc => {
+      const techMatch = activeTechs.length === 0 ||
+        activeTechs.some(t => uc.classList.contains(t));
+      const impactMatch = activeImpacts.length === 0 ||
+        activeImpacts.includes(uc.dataset.impact);
+
+      if (techMatch && impactMatch) {
+        uc.classList.remove('hidden');
+        visible++;
+      } else {
+        uc.classList.add('hidden');
+      }
+    });
+
+    // 2. Collapse empty rows — if all use-cases in a row are hidden, hide the row
+    matrixRows.forEach(row => {
+      const rowCards = row.querySelectorAll('.use-case');
+      const rowVisible = [...rowCards].some(uc => !uc.classList.contains('hidden'));
+      row.classList.toggle('hidden-row', !rowVisible);
+    });
+
+    filterCountEl.textContent = `${visible} of ${total} use cases`;
+    statCountEl.textContent = visible;
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      applyFilters();
+    });
+  });
+
+  // ─── TOOLTIP LOGIC ───
+  const tooltip = document.getElementById('tooltip');
+  const ttTitle = tooltip.querySelector('.tt-title');
+  const ttDesc = tooltip.querySelector('.tt-desc');
+  const ttDb = tooltip.querySelector('.tt-databricks');
+  const ttImpact = tooltip.querySelector('.tt-impact-text');
+  const ttBadge = tooltip.querySelector('.tt-tech-badge');
+
+  useCases.forEach(uc => {
+    uc.addEventListener('mouseenter', () => {
+      if (uc.classList.contains('hidden')) return;
+      ttTitle.textContent = uc.dataset.title;
+      ttDesc.textContent = uc.dataset.desc;
+      ttDb.innerHTML = `<strong>Databricks Angle</strong>${uc.dataset.db}`;
+      ttImpact.textContent = `Impact: ${uc.dataset.impact}`;
+      ttBadge.textContent = uc.dataset.tech;
+      ttBadge.className = 'tt-tech-badge';
+      if (uc.classList.contains('gen-ai')) ttBadge.classList.add('gen-ai');
+      else if (uc.classList.contains('data-analytics')) ttBadge.classList.add('data-analytics');
+      else if (uc.classList.contains('data-science')) ttBadge.classList.add('data-science');
+      tooltip.classList.add('visible');
+    });
+
+    uc.addEventListener('mousemove', (e) => {
+      const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+      const ww = window.innerWidth, wh = window.innerHeight;
+      let left = e.clientX + 16, top = e.clientY - 8;
+      if (left + tw > ww - 16) left = e.clientX - tw - 16;
+      if (top + th > wh - 16) top = wh - th - 16;
+      if (top < 8) top = 8;
+      tooltip.style.left = left + 'px';
+      tooltip.style.top = top + 'px';
+    });
+
+    uc.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+  });
+</script>
+
+</body>
+</html>
