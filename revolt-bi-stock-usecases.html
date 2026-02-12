@@ -338,7 +338,7 @@
     font-size: 12px;
     font-weight: 500;
     line-height: 1.4;
-    cursor: default;
+    cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, opacity 0.25s ease;
     border-left: 3px solid transparent;
   }
@@ -359,6 +359,9 @@
   .use-case.data-science:hover { background: rgba(176,184,192,0.14); }
 
   .use-case .uc-title { display: block; font-weight: 600; margin-bottom: 2px; }
+  .use-case .uc-source { position: absolute; top: 8px; right: 8px; opacity: 0; transition: opacity 0.15s; }
+  .use-case:hover .uc-source { opacity: 0.6; }
+  .use-case .uc-source svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; }
   .use-case .uc-impact { display: flex; gap: 2px; margin-top: 4px; }
   .use-case .uc-impact .bar { width: 3px; height: 10px; border-radius: 1.5px; background: currentColor; opacity: 0.2; }
   .use-case .uc-impact .bar.filled { opacity: 1; }
@@ -386,6 +389,10 @@
   .tooltip .tt-desc { color: var(--text-secondary); margin-bottom: 12px; }
   .tooltip .tt-databricks { padding: 10px 12px; border-radius: 6px; background: rgba(235,165,45,0.08); border: 1px solid rgba(235,165,45,0.25); font-size: 12px; color: var(--revolt-yellow); }
   .tooltip .tt-databricks strong { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; color: var(--revolt-yellow); opacity: 0.7; }
+  .tooltip .tt-source { display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 11px; }
+  .tooltip .tt-source a { color: var(--revolt-turquoise); text-decoration: none; font-weight: 600; }
+  .tooltip .tt-source a:hover { text-decoration: underline; }
+  .tooltip .tt-source svg { width: 12px; height: 12px; stroke: var(--revolt-turquoise); fill: none; stroke-width: 2; flex-shrink: 0; }
   .tooltip .tt-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
   .tooltip .tt-tech-badge { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
   .tooltip .tt-tech-badge.gen-ai { background: var(--gen-ai-bg); color: var(--gen-ai); border: 1px solid var(--gen-ai-border); }
@@ -495,48 +502,48 @@
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="Agentic Commerce — Autonomous B2B Ordering" data-desc="Deploy AI agents that act on behalf of buyers to anticipate needs, check inventory levels, and automate re-ordering for bars, restaurants, and retailers." data-db="Mosaic AI agents query historical order data and real-time inventory via Lakehouse to generate autonomous purchase orders." data-tech="Generative AI" data-impact="High">
+      <div class="use-case gen-ai" data-title="Agentic Commerce — Autonomous B2B Ordering" data-desc="Deploy AI agents that act on behalf of buyers to anticipate needs, check inventory levels, and automate re-ordering for bars, restaurants, and retailers." data-db="Mosaic AI agents query historical order data and real-time inventory via Lakehouse to generate autonomous purchase orders." data-tech="Generative AI" data-impact="High" data-source="https://www.databricks.com/blog/introducing-databricks-cross-industry-partner-accelerators-agentic-ai-genai-and-llmops" data-source-label="Databricks Blog">
         <span class="uc-title">Agentic Commerce</span>Autonomous B2B re-ordering
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-science" data-title="Distributor &amp; Retailer Scoring" data-desc="AI scoring system that prioritizes high-value distribution partners and retail accounts based on volume, velocity, credit risk, and growth potential." data-db="Train ML models on Delta Lake to output dynamic 'propensity to buy' scores. Refresh daily via Databricks Workflows." data-tech="Data Science / ML" data-impact="High">
+      <div class="use-case data-science" data-title="Distributor &amp; Retailer Scoring" data-desc="AI scoring system that prioritizes high-value distribution partners and retail accounts based on volume, velocity, credit risk, and growth potential." data-db="Train ML models on Delta Lake to output dynamic 'propensity to buy' scores. Refresh daily via Databricks Workflows." data-tech="Data Science / ML" data-impact="High" data-source="https://www.databricks.com/solutions/accelerators/propensity-scoring" data-source-label="Databricks Accelerator">
         <span class="uc-title">Distributor Scoring</span>Propensity-to-buy models
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-science" data-title="90-Day Upsell &amp; Cross-Sell Framework" data-desc="Predictive models identifying the optimal time to pitch new SKUs to existing accounts. If a client buys vodka but not gin, AI detects the white space and triggers a targeted campaign." data-db="Feature Store tracks customer purchase patterns. MLflow models predict next-best-product within 90-day window." data-tech="Data Science / ML" data-impact="Medium">
+      <div class="use-case data-science" data-title="90-Day Upsell &amp; Cross-Sell Framework" data-desc="Predictive models identifying the optimal time to pitch new SKUs to existing accounts. If a client buys vodka but not gin, AI detects the white space and triggers a targeted campaign." data-db="Feature Store tracks customer purchase patterns. MLflow models predict next-best-product within 90-day window." data-tech="Data Science / ML" data-impact="Medium" data-source="https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/the-value-of-getting-personalization-right-or-wrong-is-multiplying" data-source-label="McKinsey">
         <span class="uc-title">Upsell Framework</span>90-day cross-sell engine
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="Generative Engine Optimization (GEO)" data-desc="Monitor and optimize brand presence in LLM-generated search results (Gemini, ChatGPT). When a buyer asks 'which gin to stock?', your brand must appear." data-db="Ingest LLM search results via APIs, store in Delta Lake, track share-of-voice over time with Mosaic AI." data-tech="Generative AI" data-impact="High">
+      <div class="use-case gen-ai" data-title="Generative Engine Optimization (GEO)" data-desc="Monitor and optimize brand presence in LLM-generated search results (Gemini, ChatGPT). When a buyer asks 'which gin to stock?', your brand must appear." data-db="Ingest LLM search results via APIs, store in Delta Lake, track share-of-voice over time with Mosaic AI." data-tech="Generative AI" data-impact="High" data-source="https://searchengineland.com/guide/what-is-geo" data-source-label="Search Engine Land">
         <span class="uc-title">Gen Engine Optimization</span>Brand presence in LLM results
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Hyper-Personalized Flavor Profiling" data-desc="Recommendation engine analyzing consumer preference data to suggest specific products or cocktail recipes — similar to Diageo's 'What's Your Whisky?' approach." data-db="Collaborative filtering models on Databricks with real-time serving via Model Serving endpoints." data-tech="Data Analytics" data-impact="Medium">
+      <div class="use-case data-analytics" data-title="Hyper-Personalized Flavor Profiling" data-desc="Recommendation engine analyzing consumer preference data to suggest specific products or cocktail recipes — similar to Diageo's 'What's Your Whisky?' approach." data-db="Collaborative filtering models on Databricks with real-time serving via Model Serving endpoints." data-tech="Data Analytics" data-impact="Medium" data-source="https://www.databricks.com/blog/2023/01/06/products-we-think-you-might-generating-personalized-recommendations.html" data-source-label="Databricks Blog">
         <span class="uc-title">Flavor Profiling</span>Personalized product recommendations
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Retail Media Network Analytics" data-desc="Unify data from fragmented retail media sources (Instacart, DoorDash, UberEats) to measure ad performance and ROI across digital shelves." data-db="Medallion architecture to ingest, cleanse, and unify cross-platform ad data in a single Lakehouse." data-tech="Data Analytics" data-impact="Medium">
+      <div class="use-case data-analytics" data-title="Retail Media Network Analytics" data-desc="Unify data from fragmented retail media sources (Instacart, DoorDash, UberEats) to measure ad performance and ROI across digital shelves." data-db="Medallion architecture to ingest, cleanse, and unify cross-platform ad data in a single Lakehouse." data-tech="Data Analytics" data-impact="Medium" data-source="https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/commerce-media-the-new-force-transforming-advertising" data-source-label="McKinsey">
         <span class="uc-title">Retail Media Analytics</span>Cross-platform ad ROI
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Sponsorship Lift Measurement" data-desc="Connect national sponsorship data with local sales data to measure actual revenue lift from events (e.g., stadium activations) in nearby retail outlets." data-db="Geospatial joins in Spark connecting event locations to POS data within configurable radius." data-tech="Data Analytics" data-impact="Low">
+      <div class="use-case data-analytics" data-title="Sponsorship Lift Measurement" data-desc="Connect national sponsorship data with local sales data to measure actual revenue lift from events (e.g., stadium activations) in nearby retail outlets." data-db="Geospatial joins in Spark connecting event locations to POS data within configurable radius." data-tech="Data Analytics" data-impact="Low" data-source="https://nielsensports.com/return-on-sponsorship-investment/" data-source-label="Nielsen Sports">
         <span class="uc-title">Sponsorship Lift</span>Event-to-sales attribution
         <div class="uc-impact"><div class="bar filled"></div><div class="bar"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case data-science" data-title="Dynamic Pricing Engine" data-desc="Automate complex multi-jurisdictional pricing rules to handle state-by-state alcohol regulations and tax variances, maximizing margin per region." data-db="Rule-based engines integrated with real-time ERP data streams via Structured Streaming on Databricks." data-tech="Data Science / ML" data-impact="High">
+      <div class="use-case data-science" data-title="Dynamic Pricing Engine" data-desc="Automate complex multi-jurisdictional pricing rules to handle state-by-state alcohol regulations and tax variances, maximizing margin per region." data-db="Rule-based engines integrated with real-time ERP data streams via Structured Streaming on Databricks." data-tech="Data Science / ML" data-impact="High" data-source="https://www.mckinsey.com/industries/retail/our-insights/how-retailers-can-drive-profitable-growth-through-dynamic-pricing" data-source-label="McKinsey">
         <span class="uc-title">Dynamic Pricing</span>Multi-jurisdictional rules engine
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="AI-Powered Label &amp; Claim Validation" data-desc="Pre-launch validation of product labels and marketing claims against regulations to accelerate time-to-market for new products." data-db="Fine-tuned LLM on regulatory corpus via Mosaic AI, checking label text against TTB rules before submission." data-tech="Generative AI" data-impact="Medium">
+      <div class="use-case gen-ai" data-title="AI-Powered Label &amp; Claim Validation" data-desc="Pre-launch validation of product labels and marketing claims against regulations to accelerate time-to-market for new products." data-db="Fine-tuned LLM on regulatory corpus via Mosaic AI, checking label text against TTB rules before submission." data-tech="Generative AI" data-impact="Medium" data-source="https://www.ttb.gov/labeling/labeling-resources" data-source-label="TTB.gov">
         <span class="uc-title">Label Pre-Validation</span>Faster time-to-market
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
@@ -552,48 +559,48 @@
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="Automated Sales Outreach &amp; Follow-Up" data-desc="AI generates personalized outreach scripts, follow-up emails, and distributor briefs based on account history and current inventory gaps." data-db="Mosaic AI agents with RAG over CRM + order data to generate contextual sales communications." data-tech="Generative AI" data-impact="Medium">
+      <div class="use-case gen-ai" data-title="Automated Sales Outreach &amp; Follow-Up" data-desc="AI generates personalized outreach scripts, follow-up emails, and distributor briefs based on account history and current inventory gaps." data-db="Mosaic AI agents with RAG over CRM + order data to generate contextual sales communications." data-tech="Generative AI" data-impact="Medium" data-source="https://www.databricks.com/blog/build-compound-ai-systems-faster-databricks-mosaic-ai" data-source-label="Databricks Blog">
         <span class="uc-title">Sales Automation</span>AI-generated outreach &amp; briefs
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Supplier-Distributor Shared Dashboards" data-desc="Single source of truth for sales performance and inventory visible to both suppliers and distributors — eliminating reconciliation overhead." data-db="Delta Sharing to securely share live data tables between organizations without copying data." data-tech="Data Analytics" data-impact="Medium">
+      <div class="use-case data-analytics" data-title="Supplier-Distributor Shared Dashboards" data-desc="Single source of truth for sales performance and inventory visible to both suppliers and distributors — eliminating reconciliation overhead." data-db="Delta Sharing to securely share live data tables between organizations without copying data." data-tech="Data Analytics" data-impact="Medium" data-source="https://www.databricks.com/product/delta-sharing" data-source-label="Databricks">
         <span class="uc-title">Shared Dashboards</span>Delta Sharing for partners
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="Generative Content &amp; Packaging Design" data-desc="Automated generation of sell sheets, social media content, product descriptions, and packaging variants at scale. Tools like Vizit score designs before manufacturing." data-db="Mosaic AI with image generation models. A/B scoring pipelines to predict shelf impact before production." data-tech="Generative AI" data-impact="High">
+      <div class="use-case gen-ai" data-title="Generative Content &amp; Packaging Design" data-desc="Automated generation of sell sheets, social media content, product descriptions, and packaging variants at scale. Tools like Vizit score designs before manufacturing." data-db="Mosaic AI with image generation models. A/B scoring pipelines to predict shelf impact before production." data-tech="Generative AI" data-impact="High" data-source="https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier" data-source-label="McKinsey">
         <span class="uc-title">Content Generation</span>Sell sheets, social, packaging AI
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case gen-ai" data-title="Market Research Synthesis" data-desc="Instant summarization of thousands of interviews, reviews, and qualitative data into actionable insights — reducing weeks of analysis to minutes." data-db="LLM-powered summarization over unstructured data stored in Unity Catalog with full lineage tracking." data-tech="Generative AI" data-impact="Medium">
+      <div class="use-case gen-ai" data-title="Market Research Synthesis" data-desc="Instant summarization of thousands of interviews, reviews, and qualitative data into actionable insights — reducing weeks of analysis to minutes." data-db="LLM-powered summarization over unstructured data stored in Unity Catalog with full lineage tracking." data-tech="Generative AI" data-impact="Medium" data-source="https://hbr.org/2025/05/how-gen-ai-is-transforming-market-research" data-source-label="Harvard Business Review">
         <span class="uc-title">Research Synthesis</span>VoC &amp; qualitative data AI
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
-      <div class="use-case gen-ai" data-title="Micro-Trend Detection &amp; Activation" data-desc="Ingest social media firehose to detect rising micro-trends (e.g., 'Zero-Proof' movement, Espresso Martini viral) before mainstream saturation, then auto-activate campaigns for matching stock." data-db="Structured Streaming ingests social APIs. Mosaic AI classifies trends and triggers marketing workflows." data-tech="Generative AI" data-impact="Medium">
+      <div class="use-case gen-ai" data-title="Micro-Trend Detection &amp; Activation" data-desc="Ingest social media firehose to detect rising micro-trends (e.g., 'Zero-Proof' movement, Espresso Martini viral) before mainstream saturation, then auto-activate campaigns for matching stock." data-db="Structured Streaming ingests social APIs. Mosaic AI classifies trends and triggers marketing workflows." data-tech="Generative AI" data-impact="Medium" data-source="https://www.mckinsey.com/industries/consumer-packaged-goods/our-insights/fortune-or-fiction-the-real-value-of-a-digital-and-ai-transformation-in-cpg" data-source-label="McKinsey">
         <span class="uc-title">Micro-Trend Detection</span>Social signal &rarr; campaign activation
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case data-science" data-title="Predictive Demand Forecasting" data-desc="Time-series models forecasting inventory needs to mitigate tariffs and supply chain disruptions. Combines external economic indicators with internal sales data." data-db="AutoML + time-series models (Prophet, DeepAR) on Databricks with automated retraining via Workflows." data-tech="Data Science / ML" data-impact="High">
+      <div class="use-case data-science" data-title="Predictive Demand Forecasting" data-desc="Time-series models forecasting inventory needs to mitigate tariffs and supply chain disruptions. Combines external economic indicators with internal sales data." data-db="AutoML + time-series models (Prophet, DeepAR) on Databricks with automated retraining via Workflows." data-tech="Data Science / ML" data-impact="High" data-source="https://www.databricks.com/solutions/accelerators/demand-forecasting" data-source-label="Databricks Accelerator">
         <span class="uc-title">Demand Forecasting</span>Tariff &amp; disruption resilience
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-science" data-title="Visual Quality Control" data-desc="Computer vision systems on production lines automating quality checks — fill levels, label placement, cap integrity — reducing defect rates and manual inspection costs." data-db="Image classification models trained and served via Mosaic AI with edge inference integration." data-tech="Data Science / ML" data-impact="Medium">
+      <div class="use-case data-science" data-title="Visual Quality Control" data-desc="Computer vision systems on production lines automating quality checks — fill levels, label placement, cap integrity — reducing defect rates and manual inspection costs." data-db="Image classification models trained and served via Mosaic AI with edge inference integration." data-tech="Data Science / ML" data-impact="Medium" data-source="https://www.databricks.com/solutions/accelerators/product-quality-inspection" data-source-label="Databricks Accelerator">
         <span class="uc-title">Visual QC</span>Computer vision on production line
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="Automated Regulatory Compliance Checks" data-desc="AI scans marketing assets and labels against TTB regulations and state laws to ensure compliance before launch — preventing costly recalls and fines." data-db="Fine-tuned LLM on regulatory corpus. Unity Catalog tracks which assets passed/failed compliance with full audit trail." data-tech="Generative AI" data-impact="High">
+      <div class="use-case gen-ai" data-title="Automated Regulatory Compliance Checks" data-desc="AI scans marketing assets and labels against TTB regulations and state laws to ensure compliance before launch — preventing costly recalls and fines." data-db="Fine-tuned LLM on regulatory corpus. Unity Catalog tracks which assets passed/failed compliance with full audit trail." data-tech="Generative AI" data-impact="High" data-source="https://www.deloitte.com/us/en/insights/industry/government-public-sector-services/automation-and-generative-ai-in-government/use-of-generative-ai-in-government-to-transform-regulatory-operations.html" data-source-label="Deloitte">
         <span class="uc-title">Regulatory AI</span>TTB &amp; state law auto-check
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Data Privacy &amp; PII Governance" data-desc="PII mapping and de-identification pipelines ensuring compliance with privacy laws when using consumer data for marketing personalization." data-db="Unity Catalog for governance, lineage tracking, and automated PII detection with column-level masking." data-tech="Data Analytics" data-impact="Medium">
+      <div class="use-case data-analytics" data-title="Data Privacy &amp; PII Governance" data-desc="PII mapping and de-identification pipelines ensuring compliance with privacy laws when using consumer data for marketing personalization." data-db="Unity Catalog for governance, lineage tracking, and automated PII detection with column-level masking." data-tech="Data Analytics" data-impact="Medium" data-source="https://www.databricks.com/blog/find-sensitive-data-scale-data-classification-unity-catalog" data-source-label="Databricks Blog">
         <span class="uc-title">PII Governance</span>Unity Catalog privacy pipelines
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
@@ -609,40 +616,40 @@
     </div>
 
     <div class="cell">
-      <div class="use-case data-science" data-title="Inventory Par Value Optimization" data-desc="Calculate profit-protecting inventory 'par values' for retailers and on-premise accounts to prevent overstocking (dead stock) while ensuring availability." data-db="Optimization algorithms on Databricks computing ideal stock levels per SKU per location, refreshed weekly." data-tech="Data Science / ML" data-impact="High">
+      <div class="use-case data-science" data-title="Inventory Par Value Optimization" data-desc="Calculate profit-protecting inventory 'par values' for retailers and on-premise accounts to prevent overstocking (dead stock) while ensuring availability." data-db="Optimization algorithms on Databricks computing ideal stock levels per SKU per location, refreshed weekly." data-tech="Data Science / ML" data-impact="High" data-source="https://www.mckinsey.com/capabilities/operations/our-insights/future-proofing-the-supply-chain" data-source-label="McKinsey">
         <span class="uc-title">Par Value Optimization</span>Dead stock prevention
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Inventory-Aware Retail Media Bidding" data-desc="Connect stock levels to ad bid systems — increase bids when overstock risk is high, pause ads when stock is low — optimizing marketing spend against inventory reality." data-db="Real-time stock feed joined with ad platform APIs via Structured Streaming, triggering bid adjustments." data-tech="Data Analytics" data-impact="Medium">
+      <div class="use-case data-analytics" data-title="Inventory-Aware Retail Media Bidding" data-desc="Connect stock levels to ad bid systems — increase bids when overstock risk is high, pause ads when stock is low — optimizing marketing spend against inventory reality." data-db="Real-time stock feed joined with ad platform APIs via Structured Streaming, triggering bid adjustments." data-tech="Data Analytics" data-impact="Medium" data-source="https://www.bcg.com/publications/2024/driving-brand-success-with-retail-media-innovation" data-source-label="BCG">
         <span class="uc-title">Smart Ad Bidding</span>Stock-linked media spend
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case data-science" data-title="Packaging Performance Scoring" data-desc="AI scores packaging designs based on predicted consumer appeal and shelf impact before manufacturing — avoiding costly redesigns post-production." data-db="Computer vision models trained on historical packaging performance data with A/B testing framework." data-tech="Data Science / ML" data-impact="Medium">
+      <div class="use-case data-science" data-title="Packaging Performance Scoring" data-desc="AI scores packaging designs based on predicted consumer appeal and shelf impact before manufacturing — avoiding costly redesigns post-production." data-db="Computer vision models trained on historical packaging performance data with A/B testing framework." data-tech="Data Science / ML" data-impact="Medium" data-source="https://www.mckinsey.com.br/industries/packaging-and-paper/our-insights/generative-ai-the-packaging-and-paper-industrys-next-frontier" data-source-label="McKinsey">
         <span class="uc-title">Packaging AI Score</span>Pre-production design validation
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
-      <div class="use-case gen-ai" data-title="Voice of Customer Sentiment Analysis" data-desc="Analyze unstructured text from reviews, social media, and support tickets to surface product issues early — before they become costly recalls or PR crises." data-db="NLP pipelines with Mosaic AI processing text streams. Alerts triggered when negative sentiment exceeds thresholds." data-tech="Generative AI" data-impact="Low">
+      <div class="use-case gen-ai" data-title="Voice of Customer Sentiment Analysis" data-desc="Analyze unstructured text from reviews, social media, and support tickets to surface product issues early — before they become costly recalls or PR crises." data-db="NLP pipelines with Mosaic AI processing text streams. Alerts triggered when negative sentiment exceeds thresholds." data-tech="Generative AI" data-impact="Low" data-source="https://www.databricks.com/blog/step-step-guide-ai-powered-customer-sentiment-analysis" data-source-label="Databricks Blog">
         <span class="uc-title">VoC Sentiment</span>Early issue detection
         <div class="uc-impact"><div class="bar filled"></div><div class="bar"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case data-science" data-title="Supply Chain Disruption Modeling" data-desc="Simulate impact of tariffs, shipping delays, and raw material shortages on production costs. Recommend alternative sourcing strategies to protect margins." data-db="Monte Carlo simulations and scenario planning on Databricks Spark clusters with external data enrichment." data-tech="Data Science / ML" data-impact="High">
+      <div class="use-case data-science" data-title="Supply Chain Disruption Modeling" data-desc="Simulate impact of tariffs, shipping delays, and raw material shortages on production costs. Recommend alternative sourcing strategies to protect margins." data-db="Monte Carlo simulations and scenario planning on Databricks Spark clusters with external data enrichment." data-tech="Data Science / ML" data-impact="High" data-source="https://www.mckinsey.com/capabilities/operations/our-insights/supply-chain-risk-survey-2024" data-source-label="McKinsey">
         <span class="uc-title">Disruption Modeling</span>Tariff &amp; sourcing scenarios
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar filled"></div></div>
       </div>
-      <div class="use-case data-analytics" data-title="Production Yield Optimization" data-desc="Analyze production line data to identify inefficiencies, reduce waste, and optimize batch sizes — directly reducing per-unit production costs." data-db="IoT data ingestion via Auto Loader, analyzed with Spark SQL to detect yield patterns and anomalies." data-tech="Data Analytics" data-impact="Medium">
+      <div class="use-case data-analytics" data-title="Production Yield Optimization" data-desc="Analyze production line data to identify inefficiencies, reduce waste, and optimize batch sizes — directly reducing per-unit production costs." data-db="IoT data ingestion via Auto Loader, analyzed with Spark SQL to detect yield patterns and anomalies." data-tech="Data Analytics" data-impact="Medium" data-source="https://www.databricks.com/solutions/industries/manufacturing" data-source-label="Databricks">
         <span class="uc-title">Yield Optimization</span>Reduce production waste
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="use-case gen-ai" data-title="Compliance Risk Scoring &amp; Alerting" data-desc="Continuously monitor regulatory changes across jurisdictions and score the risk impact on current products, marketing, and distribution — avoiding fines and product holds." data-db="LLM monitors regulatory feeds. Risk scores computed and surfaced via dashboards with automated alerts." data-tech="Generative AI" data-impact="Medium">
+      <div class="use-case gen-ai" data-title="Compliance Risk Scoring &amp; Alerting" data-desc="Continuously monitor regulatory changes across jurisdictions and score the risk impact on current products, marketing, and distribution — avoiding fines and product holds." data-db="LLM monitors regulatory feeds. Risk scores computed and surfaced via dashboards with automated alerts." data-tech="Generative AI" data-impact="Medium" data-source="https://www.deloitte.com/global/en/Industries/financial-services/perspectives/gx-ai-and-risk-management.html" data-source-label="Deloitte">
         <span class="uc-title">Compliance Risk Score</span>Proactive regulatory alerts
         <div class="uc-impact"><div class="bar filled"></div><div class="bar filled"></div><div class="bar"></div></div>
       </div>
@@ -681,6 +688,7 @@
   <div class="tt-title"></div>
   <div class="tt-desc"></div>
   <div class="tt-databricks"><strong>Databricks Angle</strong></div>
+  <div class="tt-source"></div>
   <div class="tt-meta">
     <span class="tt-impact-text"></span>
     <span class="tt-tech-badge"></span>
@@ -745,6 +753,7 @@
   const ttTitle = tooltip.querySelector('.tt-title');
   const ttDesc = tooltip.querySelector('.tt-desc');
   const ttDb = tooltip.querySelector('.tt-databricks');
+  const ttSource = tooltip.querySelector('.tt-source');
   const ttImpact = tooltip.querySelector('.tt-impact-text');
   const ttBadge = tooltip.querySelector('.tt-tech-badge');
 
@@ -754,6 +763,12 @@
       ttTitle.textContent = uc.dataset.title;
       ttDesc.textContent = uc.dataset.desc;
       ttDb.innerHTML = `<strong>Databricks Angle</strong>${uc.dataset.db}`;
+      if (uc.dataset.source) {
+        ttSource.innerHTML = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><a href="${uc.dataset.source}" target="_blank">${uc.dataset.sourceLabel || 'Source'}</a>`;
+        ttSource.style.display = 'flex';
+      } else {
+        ttSource.style.display = 'none';
+      }
       ttImpact.textContent = `Impact: ${uc.dataset.impact}`;
       ttBadge.textContent = uc.dataset.tech;
       ttBadge.className = 'tt-tech-badge';
@@ -776,6 +791,10 @@
 
     uc.addEventListener('mouseleave', () => {
       tooltip.classList.remove('visible');
+    });
+
+    uc.addEventListener('click', () => {
+      if (uc.dataset.source) window.open(uc.dataset.source, '_blank');
     });
   });
 </script>
