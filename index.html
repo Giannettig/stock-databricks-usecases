@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Revolt BI × Stock — Databricks Use Cases</title>
+<title>Revolt BI × Stock — Use Cases on Databricks</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,48 +15,89 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
   }
-  .container {
+  .gate {
     text-align: center;
-    max-width: 520px;
+    max-width: 400px;
+    padding: 40px;
   }
-  .container img { height: 40px; margin-bottom: 32px; }
-  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-  h1 span { color: #EBA52D; }
-  p { color: #B0B8C0; font-size: 15px; margin-bottom: 40px; }
-  .links { display: flex; gap: 16px; justify-content: center; }
-  a {
-    display: inline-block;
-    padding: 14px 32px;
-    border-radius: 8px;
+  .gate h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .gate h1 span { color: #EBA52D; }
+  .gate p {
+    color: #B0B8C0;
     font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.15s ease;
+    margin-bottom: 32px;
   }
-  a.primary {
+  .gate input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border: 1px solid #2A2A2A;
+    background: #141414;
+    color: #fff;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.15s;
+  }
+  .gate input:focus { border-color: #EBA52D; }
+  .gate button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
     background: #EBA52D;
     color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
   }
-  a.primary:hover { background: #d4922a; }
-  a.secondary {
-    background: transparent;
-    color: #B0B8C0;
-    border: 1px solid #2A2A2A;
+  .gate button:hover { background: #d4922a; }
+  .gate .error {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 8px;
+    display: none;
   }
-  a.secondary:hover { border-color: #50D2D2; color: #50D2D2; }
+  .gate .footer {
+    margin-top: 32px;
+    font-size: 11px;
+    color: #6A7480;
+  }
 </style>
 </head>
 <body>
-  <div class="container">
-    <img src="revolt-logo-yellow.png" alt="Revolt BI">
-    <h1>AI Use Cases <span>on Databricks</span></h1>
-    <p>Interactive MECE framework for Stock Plzeň-Božkov's beverage alcohol operations.</p>
-    <div class="links">
-      <a href="revolt-bi-stock-usecases.html" class="primary">English Version</a>
-      <a href="revolt-bi-stock-usecases-cz.html" class="secondary">Česká verze</a>
-    </div>
-  </div>
+<div class="gate">
+  <h1>Revolt BI <span>× Stock</span></h1>
+  <p>This content is password-protected.<br>Enter the access code to continue.</p>
+  <input type="password" id="pw" placeholder="Access code" autofocus
+    onkeydown="if(event.key==='Enter')check()">
+  <button onclick="check()">Enter</button>
+  <div class="error" id="err">Incorrect code. Try again.</div>
+  <div class="footer">Revolt BI — Confidential</div>
+</div>
+<script>
+function check() {
+  var pw = document.getElementById('pw').value;
+  // Simple hash check (not crypto-secure, just a gate)
+  if (pw === atob('c3RvY2syMDI2')) {
+    sessionStorage.setItem('stock_auth', '1');
+    window.location.href = 'landing.html';
+  } else {
+    document.getElementById('err').style.display = 'block';
+  }
+}
+// Auto-redirect if already authenticated
+if (sessionStorage.getItem('stock_auth') === '1') {
+  window.location.href = 'landing.html';
+}
+</script>
 </body>
 </html>
